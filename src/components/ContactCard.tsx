@@ -34,3 +34,4 @@ const ContactCard = ({ contact }: ContactCardProps) => (
 );
 
 export default ContactCard;
+e
