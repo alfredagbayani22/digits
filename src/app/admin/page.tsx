@@ -1,9 +1,11 @@
 import { getServerSession } from 'next-auth';
 import { Col, Container, Row, Table } from 'react-bootstrap';
 import StuffItemAdmin from '@/components/StuffItemAdmin';
+import ContactCardAdmin from '@/components/ContactCardAdmin';
 import { prisma } from '@/lib/prisma';
 import { adminProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
+import { Contact } from '@/lib/validationSchemas';
 
 const AdminPage = async () => {
   const session = await getServerSession(authOptions);
@@ -13,11 +15,24 @@ const AdminPage = async () => {
     } | null,
   );
   const stuff = await prisma.stuff.findMany({});
+  const contacts = await (prisma as any).contact.findMany({}) as (Contact & { owner: string })[];
   const users = await prisma.user.findMany({});
 
   return (
     <main>
       <Container id="list" fluid className="py-3">
+        <Row>
+          <Col>
+            <h2>List Contacts (Admin)</h2>
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {contacts.map((contact: Contact & { owner: string }) => (
+                <Col key={`Contact-${contact.firstName}`}>
+                  <ContactCardAdmin contact={contact} />
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
         <Row>
           <Col>
             <h1>List Stuff Admin</h1>
