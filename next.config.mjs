@@ -11,10 +11,10 @@ const nextConfig = {
   },
   // Enable SWC minification for faster builds
   swcMinify: true,
-  // Experimental features for faster builds
+  // Valid experimental features for Next.js 14.2.33
   experimental: {
-    // Reduce memory usage
-    webpackMemoryOptimizations: true,
+    // Enable optimized package imports for better performance
+    optimizePackageImports: ['react-bootstrap', 'react-bootstrap-icons'],
   },
 };
 
