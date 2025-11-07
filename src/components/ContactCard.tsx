@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { Card } from 'react-bootstrap';
 import { Contact } from '@/lib/validationSchemas';
 
 interface ContactCardProps {
-  contact: Contact;
+  contact: Contact & { id: number };
 }
 
 /* Renders a single contact in a card format. */
@@ -30,6 +31,9 @@ const ContactCard = ({ contact }: ContactCardProps) => (
     <Card.Body>
       <Card.Text>{contact.description}</Card.Text>
     </Card.Body>
+    <Card.Footer>
+      <Link href={`edit/${contact.id}`}>Edit</Link>
+    </Card.Footer>
   </Card>
 );
 
