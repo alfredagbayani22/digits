@@ -64,6 +64,62 @@ export async function deleteStuff(id: number) {
 }
 
 /**
+ * Adds a new contact to the database.
+ * @param contact, an object with the following properties: firstName, lastName, address, image, description, owner.
+ */
+export async function addContact(contact: {
+  firstName: string;
+  lastName: string;
+  address: string;
+  image: string;
+  description: string;
+  owner: string;
+}) {
+  // console.log(`addContact data: ${JSON.stringify(contact, null, 2)}`);
+  await (prisma as any).contact.create({
+    data: {
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      address: contact.address,
+      image: contact.image,
+      description: contact.description,
+      owner: contact.owner,
+    },
+  });
+  // After adding, redirect to the list page
+  redirect('/list');
+}
+
+/**
+ * Edits an existing contact in the database.
+ * @param contact, an object with the following properties: id, firstName, lastName, address, image, description, owner.
+ */
+export async function editContact(contact: {
+  id: number;
+  firstName: string;
+  lastName: string;
+  address: string;
+  image: string;
+  description: string;
+  owner: string;
+}) {
+  // console.log(`editContact data: ${JSON.stringify(contact, null, 2)}`);
+  await (prisma as any).contact.update({
+    where: { id: contact.id },
+    data: {
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      address: contact.address,
+      image: contact.image,
+      description: contact.description,
+      owner: contact.owner,
+    },
+  });
+  // After updating, redirect to the list page
+  redirect('/list');
+}
+
+/**
  * Creates a new user in the database.
  * @param credentials, an object with the following properties: email, password.
  */
