@@ -1,15 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { Card } from 'react-bootstrap';
+import { Card, ListGroup } from 'react-bootstrap';
 import { Contact } from '@/lib/validationSchemas';
+import NoteItem from './NoteItem';
+import AddNoteForm from './AddNoteForm';
+
+interface Note {
+  id: number;
+  contactId: number;
+  note: string;
+  owner: string;
+  createdAt: Date;
+}
 
 interface ContactCardProps {
   contact: Contact & { id: number };
+  notes: Note[];
 }
 
 /* Renders a single contact in a card format. */
-const ContactCard = ({ contact }: ContactCardProps) => (
+const ContactCard = ({ contact, notes }: ContactCardProps) => (
   <Card className="h-100">
     <Card.Header className="d-flex align-items-center">
       <Card.Img
@@ -31,6 +42,10 @@ const ContactCard = ({ contact }: ContactCardProps) => (
     <Card.Body>
       <Card.Text>{contact.description}</Card.Text>
     </Card.Body>
+    <ListGroup variant="flush">
+      {notes.map((note) => <NoteItem key={note.id} note={note} />)}
+    </ListGroup>
+    <AddNoteForm contactId={contact.id} />
     <Card.Footer>
       <Link href={`edit/${contact.id}`}>Edit</Link>
     </Card.Footer>

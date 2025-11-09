@@ -15,7 +15,11 @@ const AdminPage = async () => {
     } | null,
   );
   const stuff = await prisma.stuff.findMany({});
-  const contacts = await (prisma as any).contact.findMany({}) as (Contact & { owner: string })[];
+  const contacts = await (prisma as any).contact.findMany({
+    include: {
+      notes: true,
+    },
+  }) as (Contact & { id: number; owner: string; notes: any[] })[];
   const users = await prisma.user.findMany({});
 
   return (
@@ -25,9 +29,9 @@ const AdminPage = async () => {
           <Col>
             <h2>List Contacts (Admin)</h2>
             <Row xs={1} md={2} lg={3} className="g-4">
-              {contacts.map((contact: Contact & { owner: string }) => (
+              {contacts.map((contact: Contact & { id: number; owner: string; notes: any[] }) => (
                 <Col key={`Contact-${contact.firstName}`}>
-                  <ContactCardAdmin contact={contact} />
+                  <ContactCardAdmin contact={contact} notes={contact.notes} />
                 </Col>
               ))}
             </Row>

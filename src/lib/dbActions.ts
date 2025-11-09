@@ -148,3 +148,19 @@ export async function changePassword(credentials: { email: string; password: str
     },
   });
 }
+
+/**
+ * Adds a new note to the database.
+ * @param note, an object with the following properties: note, contactId, owner.
+ */
+export async function addNote(note: { note: string; contactId: number; owner: string }) {
+  console.log(`addNote data: ${JSON.stringify(note, null, 2)}`);
+  await (prisma as any).note.create({
+    data: {
+      note: note.note,
+      contactId: note.contactId,
+      owner: note.owner,
+    },
+  });
+  redirect('/list');
+}

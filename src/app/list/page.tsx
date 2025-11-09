@@ -21,7 +21,10 @@ const ListPage = async () => {
     where: {
       owner,
     },
-  }) as (Contact & { id: number })[];
+    include: {
+      notes: true,
+    },
+  }) as (Contact & { id: number; notes: any[] })[];
 
   // console.log(contacts);
   return (
@@ -31,9 +34,9 @@ const ListPage = async () => {
           <Col>
             <h2>List Contacts</h2>
             <Row xs={1} md={2} lg={3} className="g-4">
-              {contacts.map((contact: Contact & { id: number }) => (
+              {contacts.map((contact: Contact & { id: number; notes: any[] }) => (
                 <Col key={`Contact-${contact.firstName}`}>
-                  <ContactCard contact={contact} />
+                  <ContactCard contact={contact} notes={contact.notes} />
                 </Col>
               ))}
             </Row>
