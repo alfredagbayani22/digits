@@ -92,3 +92,77 @@ export async function changePassword(credentials: { email: string; password: str
     },
   });
 }
+
+/**
+ * Adds a new contact to the database.
+ * @param contact, an object with the following properties: firstName, lastName, address, image, description, owner.
+ */
+export async function addContact(contact: {
+  firstName: string;
+  lastName: string;
+  address: string;
+  image: string;
+  description: string;
+  owner: string;
+}) {
+  await prisma.contact.create({
+    data: {
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      address: contact.address,
+      image: contact.image,
+      description: contact.description,
+      owner: contact.owner,
+    },
+  });
+  redirect('/list');
+}
+
+/**
+ * Edits an existing contact in the database.
+ * @param contact, an object with the following properties: id, firstName, lastName, address, image, description, owner.
+ */
+export async function editContact(contact: {
+  id: number;
+  firstName: string;
+  lastName: string;
+  address: string;
+  image: string;
+  description: string;
+  owner: string;
+}) {
+  await prisma.contact.update({
+    where: { id: contact.id },
+    data: {
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      address: contact.address,
+      image: contact.image,
+      description: contact.description,
+      owner: contact.owner,
+    },
+  });
+  redirect('/list');
+}
+
+/**
+ * Adds a new note to the database.
+ * @param note, an object with the following properties: note, contactId, owner.
+ */
+export async function addNote(note: { note: string; contactId: number; owner: string }) {
+  console.log('addNote called with:', note);
+  try {
+    const result = await (prisma as any).note.create({
+      data: {
+        note: note.note,
+        contactId: note.contactId,
+        owner: note.owner,
+      },
+    });
+    console.log('Note created successfully:', result);
+  } catch (error) {
+    console.error('Error creating note:', error);
+    throw error;
+  }
+  redirect('/list');
+}
