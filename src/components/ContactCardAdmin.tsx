@@ -1,14 +1,25 @@
 'use client';
 
-import { Card } from 'react-bootstrap';
+import { Card, ListGroup } from 'react-bootstrap';
 import { Contact } from '@/lib/validationSchemas';
+import NoteItem from './NoteItem';
+import AddNoteForm from './AddNoteForm';
+
+interface Note {
+  id: number;
+  note: string;
+  contactId: number;
+  owner: string;
+  createdAt: Date;
+}
 
 interface ContactCardAdminProps {
-  contact: Contact & { owner: string };
+  contact: Contact & { id: number; owner: string };
+  notes: Note[];
 }
 
 /* Renders a single contact in a card format for admin view. */
-const ContactCardAdmin = ({ contact }: ContactCardAdminProps) => (
+const ContactCardAdmin = ({ contact, notes }: ContactCardAdminProps) => (
   <Card className="h-100">
     <Card.Header className="d-flex align-items-center">
       <Card.Img
@@ -31,6 +42,10 @@ const ContactCardAdmin = ({ contact }: ContactCardAdminProps) => (
       <Card.Text>{contact.description}</Card.Text>
       <p className="blockquote-footer">{contact.owner}</p>
     </Card.Body>
+    <ListGroup variant="flush">
+      {notes.map((note) => <NoteItem key={note.id} note={note} />)}
+    </ListGroup>
+    <AddNoteForm contactId={contact.id} />
   </Card>
 );
 
